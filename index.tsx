@@ -7,7 +7,6 @@ interface IconProps {
 }
 
 const PhoneIcon = ({ className }: IconProps) => (
-  // Fixed typo in SVG path: changed 19.79(19.79 to 19.79 19.79
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
 );
 const CheckIcon = ({ className }: IconProps) => (
@@ -28,18 +27,25 @@ const ClockIcon = ({ className }: IconProps) => (
 const MapPinIcon = ({ className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
 );
-const ChevronRightIcon = ({ className }: IconProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"></polyline></svg>
-);
 const ArrowLeftIcon = ({ className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
 );
+const ShieldIcon = ({ className }: IconProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+);
+
+// --- Données Globales ---
+const CONTACT_PHONE = "06 03 26 78 35";
+const CONTACT_PHONE_LINK = "tel:0603267835";
+const CONTACT_EMAIL = "smlsadon@gmail.com";
+const WHATSAPP_LINK = "https://wa.me/33603267835?text=Bonjour,%20je%20souhaiterais%20réserver%20une%20prestation%20d'état%20des%20lieux%20avec%20Lille%20Inventaire.";
+
+// --- Types de navigation ---
+type AppView = 'home' | 'services' | 'legal';
 
 // --- Composants UI ---
-
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  // Fixed error: children must be optional in the interface to allow passing them as JSX content
   children?: React.ReactNode;
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -50,7 +56,7 @@ const Button = ({ children, variant = 'primary', className = '', ...props }: But
   
   const variants = {
     primary: "border-transparent text-dark bg-gold hover:bg-goldhover shadow-sm focus:ring-gold",
-    secondary: "border-white text-white hover:bg-white hover:text-forest focus:ring-white",
+    secondary: "border-transparent text-forest bg-white hover:bg-gold hover:text-dark focus:ring-white shadow-sm",
     outline: "border-forest text-forest bg-transparent hover:bg-forest hover:text-white",
     ghost: "border-transparent text-dark hover:bg-gray-100",
   };
@@ -64,7 +70,7 @@ const Button = ({ children, variant = 'primary', className = '', ...props }: But
 
 // --- Sections & Pages ---
 
-const Navbar = ({ onNavigate, currentView }: { onNavigate: (view: 'home' | 'services') => void, currentView: string }) => {
+const Navbar = ({ onNavigate, currentView }: { onNavigate: (view: AppView) => void, currentView: AppView }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -75,11 +81,12 @@ const Navbar = ({ onNavigate, currentView }: { onNavigate: (view: 'home' | 'serv
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navColorClass = (isScrolled || currentView === 'services') ? 'text-forest' : 'text-white';
-  const logoAccentClass = (isScrolled || currentView === 'services') ? 'text-forest/80' : 'text-gold';
+  const isLightNav = isScrolled || currentView !== 'home';
+  const navColorClass = isLightNav ? 'text-forest' : 'text-white';
+  const logoAccentClass = isLightNav ? 'text-forest/80' : 'text-gold';
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled || currentView === 'services' ? 'bg-white/95 backdrop-blur-sm shadow-md py-2' : 'bg-transparent py-4'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isLightNav ? 'bg-white/95 backdrop-blur-sm shadow-md py-2' : 'bg-transparent py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div 
           onClick={() => onNavigate('home')}
@@ -93,9 +100,9 @@ const Navbar = ({ onNavigate, currentView }: { onNavigate: (view: 'home' | 'serv
           <button onClick={() => onNavigate('services')} className={`font-medium hover:text-gold transition-colors ${navColorClass}`}>Nos Tarifs</button>
           
           <div className="flex items-center space-x-4 ml-4">
-            <a href="tel:0600000000" className={`font-semibold flex items-center ${navColorClass}`}>
+            <a href={CONTACT_PHONE_LINK} className={`font-semibold flex items-center ${navColorClass}`}>
               <PhoneIcon className="w-4 h-4 mr-2" />
-              06 00 00 00 00
+              {CONTACT_PHONE}
             </a>
             <Button variant="primary" className="py-2 px-4 text-sm" onClick={() => onNavigate('services')}>
               Devis Rapide
@@ -104,47 +111,95 @@ const Navbar = ({ onNavigate, currentView }: { onNavigate: (view: 'home' | 'serv
         </div>
 
         <div className="md:hidden">
-             <Button variant="primary" className="py-2 px-3 text-xs" onClick={() => onNavigate('services')}>Devis</Button>
+             <Button variant="primary" className="py-2 px-3 text-xs" onClick={() => onNavigate('services')}>Tarifs</Button>
         </div>
       </div>
     </nav>
   );
 };
 
-const Hero = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') => void }) => {
+// --- LEGAL PAGE COMPONENT ---
+const LegalPage = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <section className="relative bg-forest pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M0 100 C 20 0 50 0 100 100 Z" fill="#fff" />
-        </svg>
-      </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center lg:text-left">
-        <div className="lg:w-2/3">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-            L’expert de vos états des lieux sur la <span className="text-gold">Métropole Lilloise</span>.
-          </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0">
-            Sécurisez vos locations grâce à une expertise indépendante à Lille, Roubaix, Tourcoing et environs. Conformité Loi Alur garantie.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <Button variant="primary" className="shadow-lg transform hover:-translate-y-1" onClick={() => onNavigate('services')}>
-              Obtenir un devis gratuit
-            </Button>
-            <Button variant="secondary" onClick={() => onNavigate('services')}>
-              Découvrir nos services
-            </Button>
-          </div>
+    <div className="bg-cream min-h-screen pt-32 pb-20">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <button 
+          onClick={() => onNavigate('home')}
+          className="flex items-center text-forest font-semibold mb-8 hover:translate-x-1 transition-transform"
+        >
+          <ArrowLeftIcon className="w-5 h-5 mr-2" /> Retour à l'accueil
+        </button>
+
+        <h1 className="text-4xl font-bold text-dark mb-12">Mentions Légales & Confidentialité</h1>
+
+        <div className="space-y-12 bg-white p-8 lg:p-12 rounded-3xl shadow-soft border border-gray-100">
+          
+          <section>
+            <h2 className="text-2xl font-bold text-forest mb-4">1. Éditeur du site</h2>
+            <div className="text-gray-600 space-y-2 leading-relaxed">
+              <p><strong>Nom commercial :</strong> Lille Inventaire</p>
+              <p><strong>Statut juridique :</strong> Micro-entreprise (Auto-entrepreneur)</p>
+              <p><strong>Adresse :</strong> Lille & Métropole</p>
+              <p><strong>Email :</strong> <a href={`mailto:${CONTACT_EMAIL}`} className="text-forest hover:underline">{CONTACT_EMAIL}</a></p>
+              <p><strong>Téléphone :</strong> {CONTACT_PHONE}</p>
+              <p><strong>SIRET :</strong> 910 130 749 00013</p>
+              <p><strong>Directeur de la publication :</strong> Samuel Sadon</p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-forest mb-4">2. Hébergement</h2>
+            <div className="text-gray-600 space-y-2 leading-relaxed">
+              <p>Le site est hébergé par la société <strong>Vercel Inc.</strong></p>
+              <p><strong>Adresse :</strong> 340 S Lemon Ave #4133 Walnut, CA 91789, USA</p>
+              <p><strong>Site web :</strong> <a href="https://vercel.com" target="_blank" rel="noopener" className="text-forest hover:underline">https://vercel.com</a></p>
+            </div>
+          </section>
+
+          <section className="bg-cream p-6 rounded-2xl border-l-4 border-gold">
+            <h2 className="text-2xl font-bold text-forest mb-4 flex items-center">
+              <ShieldIcon className="w-6 h-6 mr-3" />
+              3. Litige – Médiation de la consommation
+            </h2>
+            <div className="text-gray-600 space-y-4 leading-relaxed">
+              <p>En cas de litige entre le Client et l’entreprise, ceux-ci s’efforceront de le résoudre à l’amiable (le Client adressera une réclamation écrite auprès du professionnel ou, le cas échéant, auprès du Service Relations Clientèle du professionnel).</p>
+              <p>À défaut d’accord amiable ou en l’absence de réponse du professionnel dans un délai raisonnable d’un (1) mois, le Client consommateur au sens de l’article L.612-2 du code de la consommation a la possibilité de saisir gratuitement, si un désaccord subsiste, le médiateur compétent inscrit sur la liste des médiateurs établie par la Commission d’évaluation et de contrôle de la médiation de la consommation en application de l’article L.615-1 du code de la consommation, à savoir :</p>
+              <div className="bg-white p-4 rounded-xl border border-gray-100 font-medium">
+                <p className="text-dark">La Société Médiation Professionnelle</p>
+                <p><a href="http://www.mediateur-consommation-smp.fr" target="_blank" rel="noopener" className="text-forest hover:underline">www.mediateur-consommation-smp.fr</a></p>
+                <p>Alteritae 5 rue Salvaing 12000 Rodez</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-forest mb-4">4. Protection des données (RGPD)</h2>
+            <div className="text-gray-600 space-y-4 leading-relaxed">
+              <p>Conformément au Règlement Général sur la Protection des Données (RGPD), Lille Inventaire s'engage à ce que la collecte et le traitement de vos données soient conformes à la réglementation.</p>
+              <p>Les données collectées (nom, téléphone, email) via les formulaires de contact ou WhatsApp sont uniquement utilisées pour répondre à vos demandes de prestations. Elles ne sont en aucun cas cédées à des tiers.</p>
+              <p>Vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles sur simple demande à l'adresse <strong>{CONTACT_EMAIL}</strong>.</p>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-bold text-forest mb-4">5. Propriété intellectuelle</h2>
+            <p className="text-gray-600 leading-relaxed">
+              L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
+            </p>
+          </section>
+
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
 // --- SERVICES PAGE COMPONENT ---
-
-const ServicesPage = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') => void }) => {
+const ServicesPage = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -190,8 +245,6 @@ const ServicesPage = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') 
   return (
     <div className="bg-cream min-h-screen pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Back Button */}
         <button 
           onClick={() => onNavigate('home')}
           className="flex items-center text-forest font-semibold mb-8 hover:translate-x-1 transition-transform"
@@ -206,7 +259,6 @@ const ServicesPage = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') 
           </p>
         </header>
 
-        {/* Pricing Grid - Surface based */}
         <div className="grid lg:grid-cols-2 gap-12 mb-20">
           {pricingData.map((service, idx) => (
             <div key={idx} className="bg-white rounded-2xl shadow-soft overflow-hidden border border-gray-100 transition-all hover:shadow-xl">
@@ -215,26 +267,27 @@ const ServicesPage = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') 
                   <h3 className="text-2xl font-bold text-dark">{service.category}</h3>
                   <p className="text-gray-500 mt-1">{service.description}</p>
                 </div>
-                <div className="bg-gold/10 p-4 rounded-full">
+                <div className="bg-forest/10 p-4 rounded-full">
                   {service.icon}
                 </div>
               </div>
-              <div className="p-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="p-8 grid grid-cols-2 md:grid-cols-4 gap-4 bg-white">
                 {service.tiers.map((tier, tIdx) => (
-                  <div key={tIdx} className="text-center p-4 rounded-xl bg-cream border border-gray-50">
-                    <p className="text-sm text-gray-500 mb-2 font-medium">{tier.label}</p>
-                    <p className="text-lg font-bold text-forest">{tier.price}</p>
+                  <div key={tIdx} className="text-center p-4 rounded-xl bg-forest/5 border border-forest/10 transition-colors hover:bg-forest/10">
+                    <p className="text-sm text-forest font-semibold mb-2">{tier.label}</p>
+                    <p className="text-lg font-bold text-dark">{tier.price}</p>
                   </div>
                 ))}
               </div>
               <div className="p-6 bg-gray-50 border-t border-gray-100 text-center">
-                 <Button variant="primary" className="w-full">Réserver ce service</Button>
+                 <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="block w-full">
+                  <Button variant="primary" className="w-full">Réserver ce service via WhatsApp</Button>
+                 </a>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Flat Rate Services */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-forest mb-10 text-center">Accompagnement & Logistique</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -246,9 +299,9 @@ const ServicesPage = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') 
                 <div className="bg-gold/20 p-4 rounded-xl mr-6 relative z-10">
                   {service.icon}
                 </div>
-                <div className="relative z-10">
+                <div className="relative z-10 flex-1">
                   <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 mb-6">
                     {service.prices.map((price, pIdx) => (
                       <li key={pIdx} className="flex items-center text-gold font-semibold text-lg">
                         <CheckIcon className="w-5 h-5 mr-3 text-white" />
@@ -256,25 +309,29 @@ const ServicesPage = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') 
                       </li>
                     ))}
                   </ul>
+                  <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer" className="inline-block">
+                    <Button variant="secondary" className="px-6 py-2 text-sm">Réserver</Button>
+                  </a>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Call to Action Section */}
         <section className="bg-white rounded-3xl p-10 lg:p-16 shadow-xl border border-gold/20 text-center">
           <h2 className="text-3xl font-bold text-forest mb-6">Besoin d'un devis sur-mesure ?</h2>
           <p className="text-lg text-gray-600 mb-10 max-w-3xl mx-auto">
             Pour les surfaces supérieures à 80m², les immeubles entiers ou les besoins récurrents, nous proposons des tarifs dégressifs. Contactez-nous pour une proposition personnalisée.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <a href="tel:0600000000" className="bg-forest text-white px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center hover:bg-forest/90 transition-all">
-              <PhoneIcon className="w-5 h-5 mr-3" /> 06 00 00 00 00
+            <a href={CONTACT_PHONE_LINK} className="bg-forest text-white px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center hover:bg-forest/90 transition-all">
+              <PhoneIcon className="w-5 h-5 mr-3" /> {CONTACT_PHONE}
             </a>
-            <Button variant="outline" className="px-8 py-4 text-lg">
-              Envoyer un email
-            </Button>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="inline-block">
+              <Button variant="outline" className="px-8 py-4 text-lg w-full">
+                Envoyer un email
+              </Button>
+            </a>
           </div>
         </section>
       </div>
@@ -283,71 +340,29 @@ const ServicesPage = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') 
 };
 
 // --- Home Components ---
-
-const MainService = () => {
+const Hero = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
   return (
-    <section id="services" className="py-20 bg-cream">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-          <div className="relative mb-12 lg:mb-0">
-            <div className="absolute top-0 left-0 -ml-4 -mt-4 w-full h-full bg-gold rounded-lg transform translate-x-4 translate-y-4 opacity-20"></div>
-            <div className="relative bg-white rounded-lg shadow-xl p-8 border-l-4 border-forest">
-              <div className="flex items-center mb-6">
-                <div className="bg-forest/10 p-3 rounded-full mr-4">
-                  <ClipboardIcon className="w-8 h-8 text-forest" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-dark">Rapport d'État des Lieux</h3>
-                  <p className="text-sm text-gray-500">Document certifié conforme</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {[
-                  "Inventaire détaillé pièce par pièce",
-                  "Relevé des compteurs inclus",
-                  "Photos HD illimitées des dégradations",
-                  "Signature électronique sécurisée",
-                  "Comparatif Entrée / Sortie"
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center">
-                    <CheckIcon className="w-5 h-5 text-forest mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold text-forest mb-6">
-              L’état des lieux professionnel : votre meilleure protection locative.
-            </h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Que vous soyez propriétaire bailleur ou administrateur de biens, nous garantissons un constat impartial et exhaustif pour apaiser la relation locataire-propriétaire.
-            </p>
-            <div className="space-y-6">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-md bg-forest text-white">
-                    <span className="font-bold text-xl">1</span>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-lg font-medium text-dark">Neutralité absolue</h4>
-                  <p className="mt-1 text-gray-500">Un tiers de confiance expert pour éviter tout litige au moment de la sortie.</p>
-                </div>
-              </div>
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-md bg-forest text-white">
-                    <span className="font-bold text-xl">2</span>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-lg font-medium text-dark">Gain de temps précieux</h4>
-                  <p className="mt-1 text-gray-500">Fini les déplacements et les rendez-vous conflictuels, nous gérons tout pour vous.</p>
-                </div>
-              </div>
-            </div>
+    <section className="relative bg-forest pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <svg className="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M0 100 C 20 0 50 0 100 100 Z" fill="#fff" />
+        </svg>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center lg:text-left">
+        <div className="lg:w-2/3">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+            L’expert de vos états des lieux sur la <span className="text-gold">Métropole Lilloise</span>.
+          </h1>
+          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0">
+            Sécurisez vos locations grâce à une expertise indépendante à Lille, Roubaix, Tourcoing et environs. Conformité Loi Alur garantie.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <Button variant="primary" className="shadow-lg transform hover:-translate-y-1" onClick={() => onNavigate('services')}>
+              Obtenir un devis gratuit
+            </Button>
+            <Button variant="secondary" onClick={() => onNavigate('services')}>
+              Découvrir nos services
+            </Button>
           </div>
         </div>
       </div>
@@ -355,161 +370,111 @@ const MainService = () => {
   );
 };
 
-const SecondaryServices = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') => void }) => {
-  return (
-    <section className="py-20 bg-white text-dark">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold">Services Complémentaires</h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">Pour une gestion locative 100% déléguée et sereine.</p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-gold rounded-xl p-8 text-dark shadow-soft transform hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
-            <KeyIcon className="w-10 h-10 mb-6 text-forest relative z-10" />
-            <h3 className="text-2xl font-bold mb-4 relative z-10">Délégation de visites</h3>
-            <p className="mb-6 text-dark/90 relative z-10">
-              Ne perdez plus votre temps dans les transports. Nous assurons l'accueil des candidats locataires.
-            </p>
-            <button onClick={() => onNavigate('services')} className="inline-block border-b-2 border-forest pb-1 font-semibold hover:text-white transition-colors relative z-10">
-              Voir les forfaits visites
-            </button>
-          </div>
-          <div className="bg-gold rounded-xl p-8 text-dark shadow-soft transform hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
-            <CubeIcon className="w-10 h-10 mb-6 text-forest relative z-10" />
-            <h3 className="text-2xl font-bold mb-4 relative z-10">Visites Virtuelles & 3D</h3>
-            <p className="mb-6 text-dark/90 relative z-10">
-              Valorisez votre bien avec une immersion 3D haute définition.
-            </p>
-            <button onClick={() => onNavigate('services')} className="inline-block border-b-2 border-forest pb-1 font-semibold hover:text-white transition-colors relative z-10">
-              Découvrir la technologie 3D
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const WhyUs = () => {
-  const features = [
-    { title: "Expertise 100% Locale", desc: "Une connaissance parfaite du marché locatif de la métropole lilloise.", icon: <MapPinIcon className="w-6 h-6 text-white" /> },
-    { title: "Flexibilité Horaire", desc: "Des créneaux adaptés aux disponibilités (y compris le samedi).", icon: <ClockIcon className="w-6 h-6 text-white" /> },
-    { title: "Réactivité Immédiate", desc: "Devis sous 24h. Rapports envoyés instantanément.", icon: <CheckIcon className="w-6 h-6 text-white" /> }
-  ];
-  return (
-    <section className="py-20 bg-gray-50 border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-3xl font-bold text-forest mb-12">Pourquoi nous faire confiance ?</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {features.map((f, idx) => (
-            <div key={idx} className="flex flex-col items-center p-6">
-              <div className="w-14 h-14 bg-forest rounded-full flex items-center justify-center mb-6 shadow-md">{f.icon}</div>
-              <h3 className="text-xl font-bold mb-3">{f.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Process = () => {
-  return (
-    <section id="process" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center mb-16">Un processus simple en 4 étapes</h2>
-        <div className="grid md:grid-cols-4 gap-8">
-          {[
-            { title: "Contact & Devis", desc: "Appel ou formulaire en 2 min." },
-            { title: "Planification", desc: "Nous fixons le RDV locataire." },
-            { title: "Intervention", desc: "État des lieux sur tablette." },
-            { title: "Réception", desc: "Rapport PDF immédiat." }
-          ].map((step, idx) => (
-            <div key={idx} className="flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-full bg-gold text-dark font-bold text-xl flex items-center justify-center mb-4 border-4 border-white shadow-sm">{idx + 1}</div>
-              <h3 className="text-lg font-bold mb-2">{step.title}</h3>
-              <p className="text-sm text-gray-500">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const MapSection = () => {
-  return (
-    <section id="about" className="flex flex-col md:flex-row bg-forest text-white">
-      <div className="md:w-1/2 p-12 lg:p-20">
-        <h2 className="text-3xl font-bold mb-6">Zone d'intervention</h2>
-        <p className="text-lg text-gray-300 mb-6">Basés à Lille, nous couvrons Lille Centre, Vieux-Lille, Roubaix, Tourcoing et Villeneuve d'Ascq.</p>
-        <div className="flex items-center space-x-2 text-gold font-semibold"><MapPinIcon className="w-5 h-5" /><span>Aucun frais de déplacement sur la MEL</span></div>
-      </div>
-      <div className="md:w-1/2 bg-gray-200 min-h-[300px] relative">
-         <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Lille_Metropole_map.png')] bg-cover bg-center opacity-40 grayscale"></div>
-      </div>
-    </section>
-  );
-};
-
-const Footer = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') => void }) => {
+const Footer = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
   return (
     <footer className="bg-dark text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:flex lg:justify-between lg:items-center mb-12 border-b border-gray-700 pb-12">
           <div><h2 className="text-3xl font-bold mb-2">Prêt à sécuriser votre location ?</h2></div>
           <div className="flex gap-4 mt-6 lg:mt-0">
-            <Button variant="primary" className="font-bold">06 00 00 00 00</Button>
+            <a href={CONTACT_PHONE_LINK} className="inline-block">
+              <Button variant="primary" className="font-bold">{CONTACT_PHONE}</Button>
+            </a>
             <Button variant="outline" className="text-white border-white" onClick={() => onNavigate('services')}>Tarifs</Button>
           </div>
         </div>
         <div className="grid md:grid-cols-3 gap-8 mb-12 text-sm text-gray-400">
-          <div><h4 className="text-white font-bold mb-4 uppercase tracking-wider">Lille Inventaire</h4><p>Expert en états des lieux indépendants.</p></div>
-          <div><h4 className="text-white font-bold mb-4 uppercase tracking-wider">Contact</h4><p>Lille, France | contact@lille-inventaire.fr</p></div>
-          <div><h4 className="text-white font-bold mb-4 uppercase tracking-wider">Légal</h4><ul className="space-y-2"><li><a href="#" className="hover:text-gold">Mentions Légales</a></li></ul></div>
+          <div>
+            <h4 className="text-white font-bold mb-4 uppercase tracking-wider">Lille Inventaire</h4>
+            <p>Expert en états des lieux indépendants pour particuliers et professionnels.</p>
+            <p className="mt-4">SIRET : 910 130 749 00013</p>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-4 uppercase tracking-wider">Contact</h4>
+            <p className="mb-2">Lille, France</p>
+            <p className="mb-2"><a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-gold transition-colors">{CONTACT_EMAIL}</a></p>
+            <p>{CONTACT_PHONE}</p>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-4 uppercase tracking-wider">Légal</h4>
+            <ul className="space-y-2">
+              <li><button onClick={() => onNavigate('legal')} className="hover:text-gold transition-colors">Mentions Légales</button></li>
+              <li><button onClick={() => onNavigate('legal')} className="hover:text-gold transition-colors">Médiation & Litiges</button></li>
+            </ul>
+          </div>
         </div>
       </div>
     </footer>
   );
 };
 
-const StickyMobileFooter = ({ onNavigate }: { onNavigate: (view: 'home' | 'services') => void }) => {
+const StickyMobileFooter = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex shadow-lg">
-      <a href="tel:0600000000" className="flex-1 bg-forest text-white py-4 flex justify-center items-center font-bold text-sm"><PhoneIcon className="w-4 h-4 mr-2" /> Appeler</a>
+      <a href={CONTACT_PHONE_LINK} className="flex-1 bg-forest text-white py-4 flex justify-center items-center font-bold text-sm"><PhoneIcon className="w-4 h-4 mr-2" /> Appeler</a>
       <button onClick={() => onNavigate('services')} className="flex-1 bg-gold text-dark py-4 flex justify-center items-center font-bold text-sm"><ClipboardIcon className="w-4 h-4 mr-2" /> Nos Tarifs</button>
     </div>
   );
 };
 
 // --- MAIN APP WITH ROUTING ---
-
 const App = () => {
-  const [view, setView] = useState<'home' | 'services'>('home');
+  const [view, setView] = useState<AppView>('home');
 
-  const handleNavigate = (newView: 'home' | 'services') => {
+  const handleNavigate = (newView: AppView) => {
     setView(newView);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const renderView = () => {
+    switch(view) {
+      case 'services':
+        return <ServicesPage onNavigate={handleNavigate} />;
+      case 'legal':
+        return <LegalPage onNavigate={handleNavigate} />;
+      default:
+        return (
+          <>
+            <Hero onNavigate={handleNavigate} />
+            <section id="services" className="py-20 bg-cream">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                  <div className="relative mb-12 lg:mb-0">
+                    <div className="absolute top-0 left-0 -ml-4 -mt-4 w-full h-full bg-gold rounded-lg transform translate-x-4 translate-y-4 opacity-20"></div>
+                    <div className="relative bg-white rounded-lg shadow-xl p-8 border-l-4 border-forest">
+                      <div className="flex items-center mb-6">
+                        <div className="bg-forest/10 p-3 rounded-full mr-4"><ClipboardIcon className="w-8 h-8 text-forest" /></div>
+                        <div>
+                          <h3 className="text-lg font-bold text-dark">Rapport d'État des Lieux</h3>
+                          <p className="text-sm text-gray-500">Document certifié conforme</p>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        {["Inventaire détaillé pièce par pièce", "Relevé des compteurs inclus", "Photos HD illimitées des dégradations", "Signature électronique sécurisée", "Comparatif Entrée / Sortie"].map((item, idx) => (
+                          <div key={idx} className="flex items-center">
+                            <CheckIcon className="w-5 h-5 text-forest mr-3 flex-shrink-0" />
+                            <span className="text-gray-700">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-forest mb-6">L’état des lieux professionnel : votre meilleure protection locative.</h2>
+                    <p className="text-lg text-gray-600 mb-8">Que vous soyez propriétaire bailleur ou administrateur de biens, nous garantissons un constat impartial et exhaustif pour apaiser la relation locataire-propriétaire.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </>
+        );
+    }
   };
 
   return (
     <div className="font-sans text-dark antialiased bg-white selection:bg-gold selection:text-dark pb-16 md:pb-0">
       <Navbar onNavigate={handleNavigate} currentView={view} />
-      <main>
-        {view === 'home' ? (
-          <>
-            <Hero onNavigate={handleNavigate} />
-            <MainService />
-            <SecondaryServices onNavigate={handleNavigate} />
-            <WhyUs />
-            <Process />
-            <MapSection />
-          </>
-        ) : (
-          <ServicesPage onNavigate={handleNavigate} />
-        )}
-      </main>
+      <main>{renderView()}</main>
       <Footer onNavigate={handleNavigate} />
       <StickyMobileFooter onNavigate={handleNavigate} />
     </div>
