@@ -6,6 +6,8 @@ interface IconProps {
   className?: string;
 }
 
+const LOGO_URL = "https://raw.githubusercontent.com/Swyz974/asset/refs/heads/main/favicon-lille-immo-2.svg";
+
 const PhoneIcon = ({ className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
 );
@@ -23,9 +25,6 @@ const CubeIcon = ({ className }: IconProps) => (
 );
 const ClockIcon = ({ className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-);
-const MapPinIcon = ({ className }: IconProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
 );
 const ArrowLeftIcon = ({ className }: IconProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -68,8 +67,7 @@ const Button = ({ children, variant = 'primary', className = '', ...props }: But
   );
 };
 
-// --- Sections & Pages ---
-
+// --- Navbar ---
 const Navbar = ({ onNavigate, currentView }: { onNavigate: (view: AppView) => void, currentView: AppView }) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -90,9 +88,16 @@ const Navbar = ({ onNavigate, currentView }: { onNavigate: (view: AppView) => vo
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div 
           onClick={() => onNavigate('home')}
-          className={`text-2xl font-bold tracking-tight cursor-pointer ${navColorClass}`}
+          className="flex items-center cursor-pointer group"
         >
-          Lille<span className={logoAccentClass}>Inventaire</span>
+          <img 
+            src={LOGO_URL} 
+            alt="Logo Lille Inventaire" 
+            className="w-10 h-10 mr-3 transition-transform group-hover:scale-110"
+          />
+          <div className={`text-2xl font-bold tracking-tight ${navColorClass}`}>
+            Lille<span className={logoAccentClass}>Inventaire</span>
+          </div>
         </div>
 
         <div className="hidden md:flex items-center space-x-8">
@@ -137,7 +142,6 @@ const LegalPage = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
         <h1 className="text-4xl font-bold text-dark mb-12">Mentions Légales & Confidentialité</h1>
 
         <div className="space-y-12 bg-white p-8 lg:p-12 rounded-3xl shadow-soft border border-gray-100">
-          
           <section>
             <h2 className="text-2xl font-bold text-forest mb-4">1. Éditeur du site</h2>
             <div className="text-gray-600 space-y-2 leading-relaxed">
@@ -166,8 +170,8 @@ const LegalPage = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
               3. Litige – Médiation de la consommation
             </h2>
             <div className="text-gray-600 space-y-4 leading-relaxed">
-              <p>En cas de litige entre le Client et l’entreprise, ceux-ci s’efforceront de le résoudre à l’amiable (le Client adressera une réclamation écrite auprès du professionnel ou, le cas échéant, auprès du Service Relations Clientèle du professionnel).</p>
-              <p>À défaut d’accord amiable ou en l’absence de réponse du professionnel dans un délai raisonnable d’un (1) mois, le Client consommateur au sens de l’article L.612-2 du code de la consommation a la possibilité de saisir gratuitement, si un désaccord subsiste, le médiateur compétent inscrit sur la liste des médiateurs établie par la Commission d’évaluation et de contrôle de la médiation de la consommation en application de l’article L.615-1 du code de la consommation, à savoir :</p>
+              <p>En cas de litige entre le Client et l’entreprise, ceux-ci s’efforceront de le résoudre à l’amiable.</p>
+              <p>À défaut d’accord amiable, le Client consommateur a la possibilité de saisir gratuitement le médiateur :</p>
               <div className="bg-white p-4 rounded-xl border border-gray-100 font-medium">
                 <p className="text-dark">La Société Médiation Professionnelle</p>
                 <p><a href="http://www.mediateur-consommation-smp.fr" target="_blank" rel="noopener" className="text-forest hover:underline">www.mediateur-consommation-smp.fr</a></p>
@@ -179,19 +183,16 @@ const LegalPage = ({ onNavigate }: { onNavigate: (view: AppView) => void }) => {
           <section>
             <h2 className="text-2xl font-bold text-forest mb-4">4. Protection des données (RGPD)</h2>
             <div className="text-gray-600 space-y-4 leading-relaxed">
-              <p>Conformément au Règlement Général sur la Protection des Données (RGPD), Lille Inventaire s'engage à ce que la collecte et le traitement de vos données soient conformes à la réglementation.</p>
-              <p>Les données collectées (nom, téléphone, email) via les formulaires de contact ou WhatsApp sont uniquement utilisées pour répondre à vos demandes de prestations. Elles ne sont en aucun cas cédées à des tiers.</p>
-              <p>Vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles sur simple demande à l'adresse <strong>{CONTACT_EMAIL}</strong>.</p>
+              <p>Les données collectées via WhatsApp sont uniquement utilisées pour répondre à vos demandes. Vous disposez d'un droit d'accès et de suppression sur simple demande à <strong>{CONTACT_EMAIL}</strong>.</p>
             </div>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-forest mb-4">5. Propriété intellectuelle</h2>
             <p className="text-gray-600 leading-relaxed">
-              L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
+              Tous les droits de reproduction sont réservés.
             </p>
           </section>
-
         </div>
       </div>
     </div>
