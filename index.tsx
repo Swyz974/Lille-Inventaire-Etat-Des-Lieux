@@ -22,7 +22,7 @@ function cn(...inputs) {
 // --- GLOBAL DATA ---
 const CONTACT_PHONE = "06 03 26 78 35";
 const CONTACT_PHONE_LINK = "tel:+33603267835";
-const CONTACT_EMAIL = "smlsadon@gmail.com";
+const CONTACT_EMAIL = "Samuel@lilleinventaire.com";
 const WHATSAPP_LINK = "https://wa.me/33603267835?text=Bonjour,%20je%20souhaiterais%20réserver%20une%20prestation%20d'état%20des%20lieux.";
 
 type View = "home" | "legal";

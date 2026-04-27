@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.lille-inventaire.fr/sitemap.xml
+Sitemap: https://www.lilleinventaire.com/sitemap.xml
