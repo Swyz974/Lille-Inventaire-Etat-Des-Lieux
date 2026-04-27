@@ -13,31 +13,12 @@
     <!-- Favicon & Branding -->
     <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/Swyz974/asset/refs/heads/main/favicon-lille-immo-2.svg" />
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Swyz974/asset/refs/heads/main/favicon-lille-immo-2.svg" />
-    <meta name="theme-color" content="#028090" />
-
-    <!-- Vérification Search Console -->
-    <meta name="google-site-verification" content="VOTRE_CODE_VERIFICATION_GOOGLE" />
-    <meta name="msvalidate.01" content="VOTRE_CODE_VERIFICATION_BING" />
-
-    <!-- Open Graph / Facebook / LinkedIn -->
-    <meta property="og:type" content="business.business" />
-    <meta property="og:title" content="Lille Inventaire - Expert États des Lieux" />
-    <meta property="og:description" content="Sécurisez vos locations avec un expert indépendant. États des lieux détaillés et conformes à Lille et environs." />
-    <meta property="og:url" content="https://www.lille-inventaire.fr/" />
-    <meta property="og:site_name" content="Lille Inventaire" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/Swyz974/asset/refs/heads/main/favicon-lille-immo-2.svg" />
-    <meta property="og:locale" content="fr_FR" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Lille Inventaire - Expert États des Lieux" />
-    <meta name="twitter:description" content="Sécurisez vos locations avec un expert indépendant sur la Métropole Lilloise." />
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/Swyz974/asset/refs/heads/main/favicon-lille-immo-2.svg" />
+    <meta name="theme-color" content="#1a202c" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -47,16 +28,19 @@
           extend: {
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
+              serif: ['"Cormorant Garamond"', 'serif'],
             },
             colors: {
-              forest: '#028090',  /* TEAL - Couleur Principale */
-              gold: '#87CEEB',    /* SKY BLUE - Accent */
-              goldhover: '#ADD7F6', /* SKY BLUE - Hover */
-              dark: '#1D3539',    /* DARK TEAL - Texte */
-              cream: '#F4F9FB',   /* COOL WHITE - Fond */
+              ink: '#0f172a',      /* Slate 900 */
+              paper: '#f8fafc',    /* Slate 50 */
+              surface: '#ffffff',  
+              accent: '#0d9488',   /* Teal 600 - energetic but professional */
+              accentDark: '#0f766e',
+              gold: '#b45309',     /* Amber 700 - warm contrast */
             },
             boxShadow: {
-              'soft': '0 4px 6px -1px rgba(2, 128, 144, 0.1), 0 2px 4px -1px rgba(2, 128, 144, 0.06)',
+              'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 0 3px rgba(15, 23, 42, 0.02)',
+              'float': '0 20px 40px -10px rgba(15, 23, 42, 0.1)',
             }
           }
         }
@@ -65,6 +49,18 @@
     <style>
       html {
         scroll-behavior: smooth;
+      }
+      body {
+        background-color: #f8fafc;
+        color: #0f172a;
+      }
+      /* Custom utility classes */
+      .text-balance {
+        text-wrap: balance;
+      }
+      ::selection {
+        background-color: #0d9488;
+        color: white;
       }
     </style>
   <script type="importmap">
@@ -76,8 +72,9 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
-  <body>
+  <body class="antialiased">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

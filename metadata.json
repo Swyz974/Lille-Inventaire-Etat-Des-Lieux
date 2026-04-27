@@ -1,5 +1,6 @@
 {
-  "description": "",
+  "description": "Lille Inventaire - Expert en état des lieux résidentiel et d'entreprise. Application avec un DA moderne, minimaliste et luxueux. Présente un tarif unique de 150 euros TTC jusqu'à 99 m² pour particuliers et professionnels.",
   "requestFramePermissions": [],
-  "name": "Lille Inventaire"
+  "name": "Lille Inventaire",
+  "majorCapabilities": []
 }
